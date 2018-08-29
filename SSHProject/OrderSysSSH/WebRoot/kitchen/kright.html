@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>备菜服务</title>
+	<link rel="stylesheet" type="text/css" href="../css/user.css">
+	<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<div class="top">
+			<img src="../images/coin01.png" class="icon1"/>
+			<a href="aright.html" target="right">备菜服务</a>
+		</div>
+	</div>
+	<div class="users">
+			<table border="1" cellpadding="0" cellspacing="0" class="mytable">
+				<tr>
+					<th>桌号</th>
+					<th>菜名</th>
+					<th>数量</th>
+					<th>取消</th>
+					<th>烹饪</th>
+					<th>传菜</th>
+				</tr>
+				
+				<tr>
+					<td>${user.id }</td>
+					<td>${user.account }</td>
+					<td>${user.pwd }</td>
+					<td>
+						<a href="<%=request.getContextPath()%>/admin/updateuser.jsp?id=${user.id }" target="right">
+							<img src="../images/delete.png" style="width: 25px;height: 25px;"/>
+						</a>
+					</td>
+					<td>
+						<a href="<%=request.getContextPath()%>/userAction-delete?id=${user.id }" target="right">
+							<img src="../images/wait.png" style="width: 27px;height: 27px;position: relative;top: 2px;"/>
+						</a>
+					</td>
+					<td>
+						<a href="<%=request.getContextPath()%>/userAction-delete?id=${user.id }" target="right">
+							<img src="../images/coin11.png" style="width: 25px;height: 25px;"/>
+						</a>
+					</td>
+				</tr>
+				
+			</table>
+		</div>
+</body>
+<script type="text/javascript">
+	
+</script>
+</html>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- 注册属性文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	
+	<!-- 配置C3P0数据源 -->
+	<bean id="myC3P0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver}"/>
+		<property name="jdbcUrl" value="${jdbc.url}"/>
+		<property name="user" value="${jdbc.user}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+	
+	<!-- 注册SessionFactory -->
+	<bean id="mySessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="myC3P0DataSource"/>
+		<property name="mappingLocations" value="classpath:com/edu/ssh/entity/*.hbm.xml"/>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.current_session_context_class">
+					org.springframework.orm.hibernate4.SpringSessionContext
+				</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- 配置验证码验证Action -->
+	<bean id="myCodeVerifyAction" class="com.edu.ssh.action.login.CodeVerifyAction" scope="prototype">
+	</bean>
+	
+	<!-- 配置UserDao -->
+	<bean id="myUserDao" class="com.edu.ssh.dao.user.UserDaoImpl">
+		<property name="sessionFactory" ref="mySessionFactory"/>
+	</bean>
+	
+	<!-- 配置DishDao -->
+	<bean id="myDishDao" class="com.edu.ssh.dao.dish.DishDaoImpl">
+		<property name="sessionFactory" ref="mySessionFactory"/>
+	</bean>
+	
+	<!-- 配置VipCustomerDao -->
+	<bean id="myVipCustomerDao" class="com.edu.ssh.dao.vip.VipCustomerDaoImpl">
+		<property name="sessionFactory" ref="mySessionFactory"/>
+	</bean>
+	
+	<!-- 配置TableDao -->
+	<bean id="myTableDao" class="com.edu.ssh.dao.table.TableDaoImpl">
+		<property name="sessionFactory" ref="mySessionFactory"/>
+	</bean>
+	
+	<!-- 配置OrderDao -->
+	<bean id="myOrderDao" class="com.edu.ssh.dao.order.OrderDaoImpl">
+		<property name="sessionFactory" ref="mySessionFactory"/>
+	</bean>
+	
+	<!-- 配置LoginService -->
+	<bean id="myLoginService" class="com.edu.ssh.service.login.LoginServiceImpl">
+		<property name="dao" ref="myUserDao"/>
+	</bean>
+	
+	<!-- 配置UserService -->
+	<bean id="myUserService" class="com.edu.ssh.service.user.UserServiceImpl">
+		<property name="userDao" ref="myUserDao"/>
+	</bean>
+	
+	<!-- 配置DishService -->
+	<bean id="myDishService" class="com.edu.ssh.service.dish.DishServiceImpl">
+		<property name="dishDao" ref="myDishDao"/>
+	</bean>
+	
+	<!-- 配置CustomerService -->
+	<bean id="myCustomerService" class="com.edu.ssh.service.vip.VipCustomerServiceImpl">
+		<property name="customerDao" ref="myVipCustomerDao"/>
+	</bean>
+	
+	<!-- 配置TableService -->
+	<bean id="myTableService" class="com.edu.ssh.service.table.TableServiceImpl">
+		<property name="tableDao" ref="myTableDao"/>
+	</bean>
+	
+	<!-- 配置OrderService -->
+	<bean id="myOrderService" class="com.edu.ssh.service.order.OrderServiceImpl">
+		<property name="orderDao" ref="myOrderDao"/>
+	</bean>
+	
+	<!-- 配置LoginAction -->
+	<bean id="myLoginAction" class="com.edu.ssh.action.login.LoginAction" scope="prototype">
+		<property name="loginService" ref="myLoginService"/>
+	</bean>
+	
+	<!-- 配置管理员公告Action -->
+	<bean id="myManagerNoticeAction" class="com.edu.ssh.action.admin.ManagerNoticeAction" scope="prototype">
+	</bean>
+	
+	<!-- 配置服务员公告Action -->
+	<bean id="myWaiterNoticeAction" class="com.edu.ssh.action.waiter.WaiterNoticeAction" scope="prototype">
+	</bean>
+	
+	<!-- 配置后厨公告Action -->
+	<bean id="myKitchenNoticeAction" class="com.edu.ssh.action.kitchen.KitchenNoticeAction" scope="prototype">
+	</bean>
+	
+	<!-- 配置管理员用户管理Action -->
+	<bean id="myUserAction" class="com.edu.ssh.action.admin.UserAction" scope="prototype">
+		<property name="userService" ref="myUserService"/>
+	</bean>
+	
+	<!-- 配置管理员菜品管理Action -->
+	<bean id="myDishAciton" class="com.edu.ssh.action.admin.DishAction" scope="prototype">
+		<property name="dishService" ref="myDishService"/>
+	</bean>
+	
+	<!-- 配置管理员客户管理Action -->
+	<bean id="myCustomerAction" class="com.edu.ssh.action.admin.CustomerAction" scope="prototype">
+		<property name="customerService" ref="myCustomerService"/>
+	</bean>
+	
+	<!-- 配置管理员餐桌管理Action -->
+	<bean id="myTableAction" class="com.edu.ssh.action.admin.TableAction">
+		<property name="tableService" ref="myTableService"/>
+	</bean>
+	
+	<!-- 配置服务员菜品管理Action -->
+	<bean id="myWaiterDishAction" class="com.edu.ssh.action.waiter.WaiterAction" scope="prototype">
+		<property name="dishService" ref="myDishService"/>
+		<property name="tableService" ref="myTableService"/>
+		<property name="orderService" ref="myOrderService"/>
+	</bean>
+	
+	<!-- 配置事务管理器 -->
+	<bean id="myTransactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="mySessionFactory"/>
+	</bean>
+	
+	<!-- 配置事务通知 -->
+	<tx:advice id="myTxAdvice" transaction-manager="myTransactionManager">
+		<tx:attributes>
+			<!-- 这些被指定的方法应用哪些事务特性 -->
+			<tx:method name="get*" propagation="REQUIRED" read-only="true"/>
+			<tx:method name="*" propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- AspectJ的aop配置 -->
+	<aop:config>
+		<!-- 这里的切入点是指，要将事务织入哪些类的哪些方法上 -->
+		<aop:pointcut expression="execution(* com.edu.ssh.service..*.*(..))" id="myPC"/>
+		<aop:advisor advice-ref="myTxAdvice" pointcut-ref="myPC"/>
+	</aop:config>
+</beans>
