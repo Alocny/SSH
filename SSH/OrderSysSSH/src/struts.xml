@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<package name="default" namespace="/" extends="struts-default">
+		<!-- 验证码验证Action -->
+		<action name="verifycode" class="myCodeVerifyAction" method="verify">
+		</action>
+		
+		<!-- 登录验证Action -->
+		<action name="loginAction" class="myLoginAction" method="validate">
+			<result name="fail" type="redirect">/login.jsp</result>
+			<result name="admin" type="redirect">/admin/admin.html</result>
+			<result name="waiter" type="redirect">/waiter/waiter.html</result>
+			<result name="kitchen" type="redirect">/kitchen/kitchen.html</result>
+		</action>
+		
+		<!-- 管理员公告发布Action -->
+		<action name="managerNoticeAction" class="myManagerNoticeAction" method="sendnotice">
+		</action>
+		
+		<!-- 服务员公告Action -->
+		<action name="waiterNoticeAction" class="myWaiterNoticeAction" method="dealnotice">
+		</action>
+		
+		<!-- 后厨公告Action -->
+		<action name="kitchenNoticeAction" class="myKitchenNoticeAction" method="dealnotice">
+		</action>
+		
+		<!-- 管理员用户管理Action -->
+		<action name="userAction-*" class="myUserAction" method="{1}">
+			<result name="{1}" type="redirect">/admin/user-{1}.jsp</result>
+			<result name="success" type="redirectAction">userAction-list</result>
+			<result name="search" type="redirect">/admin/showbykey.jsp</result>
+		</action>
+		
+		<!-- 管理员菜品管理Aciton -->
+		<action name="dishAction-*" class="myDishAciton" method="{1}">
+			<result name="{1}" type="redirect">/admin/dish-{1}.jsp</result>
+			<result name="success" type="redirectAction">dishAction-list</result>
+			<result name="search" type="redirect">/admin/showbykeydish.jsp</result>
+		</action>
+		
+		<!-- 管理员客户管理Aciton -->
+		<action name="customerAction-*" class="myCustomerAction" method="{1}">
+			<result name="{1}" type="redirect">/admin/customer-{1}.jsp</result>
+			<result name="success" type="redirectAction">customerAction-list</result>
+			<result name="search" type="redirect">/admin/showbykeycustomer.jsp</result>
+		</action>
+		
+		<!-- 管理员餐桌管理Action -->
+		<action name="tableAciton-*" class="myTableAction" method="{1}">
+			<result name="{1}" type="redirect">/admin/table-{1}.jsp</result>
+			<result name="success" type="redirectAction">tableAciton-list</result>
+		</action>
+	</package>
+	
+	<package name="default2" namespace="/" extends="struts-default">
+		<action name="waiterDishAction" class="myWaiterDishAction" method="list">
+			<result name="list" type="redirect">/waiter/wright.jsp</result>
+		</action>
+		<action name="testWaiterAction" class="myWaiterDishAction" method="test">
+		</action>
+		<action name="payWaiterAction" class="myWaiterDishAction" method="payservice">
+			<result name="payservice" type="redirect">/waiter/order-list.jsp</result>
+		</action>
+		<action name="orderOkWaiterAction" class="myWaiterDishAction" method="orderok">
+			<result name="orderok" type="redirectAction">waiterDishAction</result>
+		</action>
+	</package>
+</struts>    
